@@ -1,0 +1,32 @@
+name: Setup Node.js
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  echo-node-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.8.0
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Create staging directory
+        run: mkdir staging && cp -r dist/* staging
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: Package_Node
+          path: staging
